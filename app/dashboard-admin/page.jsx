@@ -9,7 +9,6 @@ export default function DashboardAdmin() {
   const [notifications, setNotifications] = useState([]);
   const [username, setUsername] = useState("");
 
-  // load notifikasi (orders summary)
   const loadNotifications = async () => {
     try {
       const res = await fetch("/api/notif/admin");
@@ -45,7 +44,9 @@ export default function DashboardAdmin() {
     router.push("/login");
   };
 
-  // Verifikasi pembayaran -> set status "Sudah Dibayar"
+  // ========================================
+  // VERIFIKASI PEMBAYARAN
+  // ========================================
   const handleVerify = async (orderId, orderCode) => {
     const confirm = await Swal.fire({
       title: "Konfirmasi Pembayaran",
@@ -60,6 +61,11 @@ export default function DashboardAdmin() {
     if (!confirm.isConfirmed) return;
 
     try {
+      console.log("=== ADMIN VERIFIKASI ===");
+      console.log("Order ID:", orderId);
+      console.log("Booking Code:", orderCode);
+
+      // Update status di database
       const res = await fetch(`/api/orders/${orderId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -69,59 +75,35 @@ export default function DashboardAdmin() {
       if (!res.ok) {
         const t = await res.text();
         console.error("Gagal verifikasi:", res.status, t);
-        Swal.fire("Gagal", "Tidak dapat memverifikasi pembayaran (server).", "error");
+        Swal.fire("Gagal", "Tidak dapat memverifikasi pembayaran.", "error");
         return;
       }
 
-      // Update UI: temukan notifikasi dan ubah status
+      const data = await res.json();
+      console.log("Response dari server:", data);
+
+      // Update UI lokal
       setNotifications((prev) =>
         prev.map((n) =>
           n.id === orderId ? { ...n, status: "Sudah Dibayar", isRead: true } : n
         )
       );
 
-      // ========================================
-      // BROADCAST ke History Page
-      // ========================================
-      
-      // 1. Update localStorage riwayat (jika ada)
-      const riwayat = JSON.parse(localStorage.getItem("riwayat") || "[]");
-      const updatedRiwayat = riwayat.map(item => {
-        if (item.id === orderId || item.booking === orderCode) {
-          return { 
-            ...item, 
-            status: "Dibayar",
-            remaining: 0 
-          };
-        }
-        return item;
-      });
-      localStorage.setItem("riwayat", JSON.stringify(updatedRiwayat));
-
-      // 2. Trigger storage event untuk komunikasi antar tab
-      const updateEvent = {
-        id: orderId,
-        booking: orderCode,
-        status: "Dibayar",
-        timestamp: Date.now()
-      };
-      localStorage.setItem("update_history", JSON.stringify(updateEvent));
-      
-      // 3. Trigger manual event untuk tab yang sama
-      window.dispatchEvent(new Event("storage"));
-
-      // 4. Cleanup setelah beberapa detik
-      setTimeout(() => {
-        localStorage.removeItem("update_history");
-      }, 3000);
-
       Swal.fire({
-        title: "Berhasil",
-        text: "Status pesanan di-update menjadi 'Sudah Dibayar'.",
+        title: "Berhasil!",
+        html: `
+          <p>Status pesanan berhasil diupdate.</p>
+          <p class="text-sm text-gray-600 mt-2">Kode: ${orderCode}</p>
+          <p class="text-sm text-green-600 font-semibold">Status: Sudah Dibayar ✓</p>
+        `,
         icon: "success",
-        timer: 1400,
+        timer: 2000,
         showConfirmButton: false,
       });
+
+      console.log("✅ Verifikasi selesai. Database sudah diupdate.");
+      console.log("Pembeli akan melihat update saat refresh/polling.");
+      
     } catch (err) {
       console.error("Error verify:", err);
       Swal.fire("Error", "Terjadi kesalahan saat memverifikasi.", "error");
@@ -144,7 +126,6 @@ export default function DashboardAdmin() {
               </div>
             </div>
 
-            {/* Logout */}
             <button
               onClick={handleLogout}
               className="bg-linear-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-xl flex items-center gap-2 hover:opacity-90 transition-all"
@@ -159,7 +140,7 @@ export default function DashboardAdmin() {
       {/* NOTIFICATION SECTION */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-2xl shadow-xl border border-gray-200">
-          <div className="px-6 py-4 border-b bg-linera-to-r from-orange-50 to-amber-50 flex items-center justify-between">
+          <div className="px-6 py-4 border-b bg-linear-to-r from-orange-50 to-amber-50 flex items-center justify-between">
             <div>
               <h2 className="text-lg font-bold text-gray-800">Semua Notifikasi</h2>
               <p className="text-sm text-gray-600 mt-1">Daftar notifikasi pesanan terbaru</p>
