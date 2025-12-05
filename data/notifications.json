@@ -1,0 +1,25 @@
+[
+  {
+    "id": 1764932000000,
+    "type": "pesanan",
+    "title": "Pesanan Baru Masuk! 🎉",
+    "message": "Andi Wijaya telah melakukan pemesanan dengan kode BK98765",
+    "time": "5/12/2025, 18.30.00",
+    "read": false,
+    "booking": "BK98765",
+    "customerName": "Andi Wijaya",
+    "totalAmount": 45000,
+    "items": [
+      {
+        "product_name": "Nasi Goreng Spesial",
+        "quantity": 2,
+        "price": 18000
+      },
+      {
+        "product_name": "Es Teh Manis",
+        "quantity": 3,
+        "price": 3000
+      }
+    ]
+  }
+]

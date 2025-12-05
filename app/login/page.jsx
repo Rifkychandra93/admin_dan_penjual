@@ -61,13 +61,13 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <main className="min-h-screen bg-linear-to-br from-orange-50 via-amber-50 to-yellow-50">
       {/* Header */}
       <header className="bg-white shadow-md">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             <div className="flex items-center gap-3">
-              <div className="bg-gradient-to-br from-orange-400 to-red-500 p-2 rounded-xl shadow-lg">
+              <div className="bg-linear-to-br from-orange-400 to-red-500 p-2 rounded-xl shadow-lg">
                 <ShoppingBag className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -95,7 +95,7 @@ export default function LoginPage() {
             <div className="bg-white rounded-2xl shadow-xl p-8">
               {/* Form Header */}
               <div className="text-center mb-8">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl mb-4 shadow-lg">
+                <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-br from-orange-400 to-red-500 rounded-2xl mb-4 shadow-lg">
                   <LogIn className="w-8 h-8 text-white" />
                 </div>
                 <h2 className="text-3xl font-bold text-gray-800 mb-2">
@@ -194,7 +194,7 @@ export default function LoginPage() {
                   className={`w-full py-3 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center justify-center gap-2 ${
                     loading
                       ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
+                      : "bg-linear-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white"
                   }`}
                 >
                   {loading ? (
@@ -249,7 +249,7 @@ export default function LoginPage() {
             className="hidden lg:flex flex-col items-center justify-center lg:w-1/2"
           >
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-400 to-red-400 rounded-3xl blur-3xl opacity-20"></div>
+              <div className="absolute inset-0 bg-linear-to-br from-orange-400 to-red-400 rounded-3xl blur-3xl opacity-20"></div>
               <div className="relative bg-white rounded-3xl p-12 shadow-2xl">
                 <div className="text-center">
                   <div className="text-8xl mb-6">🍱</div>
